@@ -41,7 +41,6 @@ function makemacro(imageData) {
     }
     return acc;
   }, []);
-  console.log(pixel_array);
 
   for (let i = 0; i < im_height; i++) {
     // Begin Reading Rows
@@ -65,7 +64,6 @@ function makemacro(imageData) {
     current_color = "255,255,255";
 
     for (let j of width_list) {
-      console.log("j", j, "count", count);
       let line_end = false;
       last_color = current_color;
       current_color = pixel_array[i][j].slice(0, 3);
@@ -79,12 +77,6 @@ function makemacro(imageData) {
       let Dc = designationsLookup[current_color.toString()];
       let Dp = designationsLookup[last_color.toString()];
       let Dn = designationsLookup[next_color.toString()];
-      //   console.log(Dp["id"], Dc["id"], Dn["id"]);
-      //   console.log(
-      //     last_color.toString(),
-      //     current_color.toString(),
-      //     next_color.toString()
-      //   );
       if (Dc["id"] !== Dp["id"]) {
         if (Dc["id"] !== "NONE") {
           macroText += Dc["command"];
@@ -97,7 +89,6 @@ function makemacro(imageData) {
       if (!line_end) {
         macroText += advance;
       }
-      console.log("");
     }
   }
   macroText += end_macro;

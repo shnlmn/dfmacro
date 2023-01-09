@@ -6,6 +6,7 @@
       id="image"
       @change="readFile($event)"
     /><br />
+    <img :src="image" />
     <button id="download" @click="download_macro">DOWNLOAD</button>
     <canvas id="canvas" :height="img_height" :width="img_width"></canvas><br />
     <pre id="macro_code"><code id="macro_text">{{ MacroText }}</code></pre>
@@ -33,22 +34,19 @@ export default {
   },
   methods: {
     readFile(e) {
-      // let img = new Image();
       let reader = new FileReader();
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
       reader.readAsDataURL(files[0]); // Read file from input form
-      // console.log(e.target.value);
       this.file_name = e.target.value.match(/^.*?([^\\/.]*)[^\\/]*$/)[1];
-      // this.file_name = e.target.value.split(/(\\|\/)/g).pop();
 
       reader.onload = (e) => {
         // get pixels once image is loaded
-        this.image = e.target.result; // store image in component for funsies i guess
         this.img.src = e.target.result; // create DOM image from reader result
         this.img.onload = () => {
           this.img_width = this.img.width;
           this.img_height = this.img.height;
+          this.image = this.img.src;
           this.vueCanvas.drawImage(
             this.img,
             0,
@@ -57,13 +55,11 @@ export default {
             this.img_height
           ); // put image into dom once loaded
           let imgData = this.vueCanvas.getImageData(
-            //
             0,
             0,
             this.img.width,
             this.img.height
           );
-          console.log(imgData.data);
           this.MacroText = this.file_name + "\n";
           this.MacroText += makemacro(imgData);
         };
