@@ -5,15 +5,26 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "electron:build": "vue-cli-service electron:build",
+    "electron:serve": "vue-cli-service electron:serve",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps"
   },
+  "main": "background.js",
   "dependencies": {
+    "@highlightjs/vue-plugin": "^2.1.0",
+    "@mdi/font": "5.9.55",
     "core-js": "^3.8.3",
+    "highlight.js": "^11.7.0",
     "jimp": "^0.16.2",
     "node-polyfill-webpack-plugin": "^2.0.1",
+    "roboto-fontface": "*",
     "sharp": "^0.31.3",
     "vue": "^3.2.13",
-    "vue-eslint-parser": "^8.3.0"
+    "vue-eslint-parser": "^8.3.0",
+    "vuetify": "^3.0.0-beta.0",
+    "webfontloader": "^1.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
@@ -24,17 +35,24 @@
     "assert": "^2.0.0",
     "buffer": "^6.0.3",
     "crypto-browserify": "^3.12.0",
+    "electron": "^22.0.0",
+    "electron-devtools-installer": "^3.1.0",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.0.3",
     "https-browserify": "^1.0.0",
+    "node-sass": "^8.0.0",
     "os-browserify": "^0.3.0",
     "prettier": "^2.8.2",
     "process": "^0.11.10",
+    "sass-loader": "^13.2.0",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "vue-cli-plugin-electron-builder": "^2.1.1",
+    "vue-cli-plugin-vuetify": "~2.5.8",
+    "webpack-plugin-vuetify": "^2.0.0-alpha.0"
   },
   "eslintConfig": {
     "root": true,

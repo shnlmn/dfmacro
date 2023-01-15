@@ -1,14 +1,14 @@
 <template>
-  <HelloWorld msg="Welcome to Your Vue.js App" />
+  <macro-page />
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import macroPage from "./components/macro_page.vue";
 
 export default {
   name: "App",
   components: {
-    HelloWorld,
+    macroPage,
   },
 };
 </script>

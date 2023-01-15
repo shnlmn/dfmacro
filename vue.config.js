@@ -7,8 +7,14 @@ module.exports = defineConfig({
     plugins: [new NodePolyfillPlugin()],
     optimization: {
       splitChunks: {
-        chunks: "all",
+        chunks: "all"
       }
+    }
+  },
+
+  pluginOptions: {
+    vuetify: {
+      // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vuetify-loader
     }
   }
 });
