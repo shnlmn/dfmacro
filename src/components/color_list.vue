@@ -1,14 +1,12 @@
 <template>
-  <v-list-item v-for="color in color_objs" :key="color">
+  <v-card v-for="color in color_objs" :key="color" class="mx-auto">
     <template v-slot:prepend>
-      <v-avatar>
-        <v-icon :style="{ color: `rgba(${color.color})` }">{{
-          color.icon
-        }}</v-icon>
-      </v-avatar>
+      <v-icon :style="{ color: `rgba(${color.color})` }">
+        {{ color.icon }}
+      </v-icon>
     </template>
-    {{ color.command }}
-  </v-list-item>
+    <template v-slot:title> {{ color.command }} </template>
+  </v-card>
 </template>
 <script>
 export default {
@@ -53,6 +51,7 @@ export default {
   },
   watch: {
     colors_used: function () {
+      this.color_objs = [];
       this.colors_used.forEach((used) => {
         this.known_colors.forEach((known) => {
           console.log(used, Object.values(known)[0].color);
@@ -61,7 +60,6 @@ export default {
           }
         });
       });
-      console.log(this.color_objs);
       return null;
     },
   },

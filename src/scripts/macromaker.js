@@ -1,27 +1,13 @@
 import { make_pixel_array } from "./make_pixel_array";
+import { macro_commands } from "./macro_commands";
+import { designationsLookup } from "./macro_commands";
 function makemacro(imageData) {
+  const mc = new macro_commands();
   const im_width = imageData.width;
   const im_height = imageData.height;
   let current_color = "255,255,255";
   let next_color;
   let last_color = current_color;
-  const end_group = "\tEnd of group\n";
-  const end_macro = "End of macro\n";
-  const right = "\t\tKEYBOARD_CURSOR_RIGHT\n" + end_group;
-  const left = "\t\tKEYBOARD_CURSOR_LEFT\n" + end_group;
-  const down = "\t\tKEYBOARD_CURSOR_DOWN\n" + end_group;
-  //   const z_up = "\t\tCURSOR_UP_Z\n" + end_group;
-  //   const z_down = "\t\tCURSOR_DOWN_Z\n" + end_group;
-  const select = "\t\tSELECT\n" + end_group;
-  // DESIGNATIONS
-  const d_dig = "\t\tD_DESIGNATE_DIG\n\t\tDESIGNATE_DIG\n" + end_group;
-  const d_channel = "\t\tDESIGNATE_CHANNEL\n" + end_group;
-  // DESIGNATION IDS
-  const designationsLookup = {
-    "255,255,255": { id: "NONE", command: "" },
-    "0,0,0": { id: "DIG", command: d_dig },
-    "255,0,0": { id: "CHANNEL", command: d_channel },
-  };
 
   let macroText = "";
 
@@ -35,15 +21,15 @@ function makemacro(imageData) {
     if (i % 2 !== 0) {
       width_list = [...Array(im_width).keys()].reverse();
       count = -1;
-      advance = left;
+      advance = mc.left;
     } else {
       width_list = [...Array(im_width).keys()];
       count = 1;
-      advance = right;
+      advance = mc.right;
     }
 
     if (i > 0) {
-      macroText += down;
+      macroText += mc.down;
     }
 
     current_color = "255,255,255";
@@ -65,18 +51,18 @@ function makemacro(imageData) {
       if (Dc["id"] !== Dp["id"]) {
         if (Dc["id"] !== "NONE") {
           macroText += Dc["command"];
-          macroText += select;
+          macroText += mc.select;
         }
       }
       if (Dn !== Dc && Dc["id"] != "NONE") {
-        macroText += select;
+        macroText += mc.select;
       }
       if (!line_end) {
         macroText += advance;
       }
     }
   }
-  macroText += end_macro;
+  macroText += mc.end_macro;
   return macroText;
 }
 export { makemacro };

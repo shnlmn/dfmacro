@@ -1,8 +1,13 @@
 <template>
-  <v-container class="h-100">
+  <v-container>
     <v-header>
-      <h1>Dwarf Fortress Macro</h1>
+      <h1>Dwarf Fortress Macro Generator</h1>
     </v-header>
+    <v-banner>
+      I recommend using
+      <a href="https://www.pixilart.com/draw">pixilart.com</a> to design your
+      fortress.
+    </v-banner>
     <v-row class="h-25">
       <v-col>
         <v-form ref="form">
@@ -38,6 +43,7 @@
         >
       </v-col>
     </v-row>
+    <color_legend></color_legend>
     <canvas id="readCanvas" style="visibility: hidden"></canvas>
   </v-container>
 </template>
@@ -47,12 +53,13 @@ import { get_colors_used } from "../scripts/colors_used.js";
 import "highlight.js/lib/common";
 import hljsVuePlugin from "@highlightjs/vue-plugin";
 import color_list from "./color_list.vue";
+import color_legend from "./color_legend.vue";
 
 export default {
-  name: "HelloWorld",
   components: {
     highlightjs: hljsVuePlugin.component,
     color_list,
+    color_legend,
   },
   data: function () {
     return {
@@ -81,6 +88,20 @@ export default {
       if (!files.length) return;
       reader.readAsDataURL(files[0]); // Read file from input form
       this.file_name = e.target.value.match(/^.*?([^\\/.]*)[^\\/]*$/)[1];
+      //RESET SOME THINGS
+      this.colors_used = [];
+      this.readCanvas.clearRect(
+        0,
+        0,
+        this.readCanvas.width,
+        this.readCanvas.height
+      );
+      this.showCanvas.clearRect(
+        0,
+        0,
+        this.showCanvas_width,
+        this.showCanvas_height
+      );
 
       reader.onload = (e) => {
         // get pixels once image is loaded
