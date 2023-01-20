@@ -3,24 +3,29 @@
     <v-header>
       <h1>Dwarf Fortress Macro Generator</h1>
     </v-header>
+    <v-sub-header>
+      <h3>Upload a .png of your layout. Each pixel equals a tile in game.</h3>
+    </v-sub-header>
     <v-banner>
-      I recommend using
+      I recommend using a graphics editor like Photoshop or an online pixel art
+      tool like
       <a href="https://www.pixilart.com/draw">pixilart.com</a> to design your
       fortress.
     </v-banner>
-    <v-row class="h-25">
-      <v-col>
-        <v-form ref="form">
+    <v-row>
+      <v-col class="d-flex justify-center">
+        <v-form ref="form" class="w-50">
           <v-file-input
             @change="readFile($event)"
             type="file"
             label="Upload Image"
             prepend-icon="mdi-image"
           ></v-file-input>
-          <color_list :colors_used="colors_used"></color_list>
         </v-form>
       </v-col>
-
+    </v-row>
+    <color_legend></color_legend>
+    <v-row>
       <v-col>
         <v-title>Uploaded Image</v-title><br />
         <canvas
@@ -28,6 +33,10 @@
           :width="showCanvas_width"
           :height="showCanvas_height"
         ></canvas>
+        <v-banner v-if="colors_used">
+          Colors used in this image (that match the color legend)
+        </v-banner>
+        <color_list :colors_used="colors_used"></color_list>
       </v-col>
       <v-col>
         <v-title>Macro Text</v-title>
@@ -43,7 +52,6 @@
         >
       </v-col>
     </v-row>
-    <color_legend></color_legend>
     <canvas id="readCanvas" style="visibility: hidden"></canvas>
   </v-container>
 </template>
@@ -111,13 +119,15 @@ export default {
           let ar = this.img.width / this.img.height;
           let draw_height = 0;
           let draw_width = 0;
-          if (ar > 0) {
-            draw_height = 300;
-            draw_width = 300 * ar;
+          console.log("AR: ", ar);
+          if (ar < 1) {
+            draw_height = this.showCanvas_height;
+            draw_width = this.showCanvas_width * ar;
           } else {
-            draw_height = 300 * ar;
-            draw_width = 300;
+            draw_height = this.showCanvas_height / ar;
+            draw_width = this.showCanvas_width;
           }
+          console.log("draw width", draw_width, "draw height", draw_height);
           this.image = this.img.src;
           this.img_width = this.img.width;
           this.img_height = this.img.height;

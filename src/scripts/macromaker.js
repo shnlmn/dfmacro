@@ -13,6 +13,7 @@ function makemacro(imageData) {
 
   // convert image data list into a 3d array matching the width and length of the image
   const pixel_array = make_pixel_array(imageData, im_width);
+  console.log("pixel_array", pixel_array);
   for (let i = 0; i < im_height; i++) {
     // Begin Reading Rows
     let width_list;
@@ -37,24 +38,27 @@ function makemacro(imageData) {
     for (let j of width_list) {
       let line_end = false;
       last_color = current_color;
-      current_color = pixel_array[i][j].slice(0, 3);
+      current_color = pixel_array[i][j];
       if (j + count >= 0 && j + count < im_width) {
-        next_color = pixel_array[i][j + count].slice(0, 3);
+        next_color = pixel_array[i][j + count];
       } else {
         line_end = true;
         next_color = "255,255,255";
       }
 
       let Dc = designationsLookup[current_color.toString()];
-      let Dp = designationsLookup[last_color.toString()];
+      let Dl = designationsLookup[last_color.toString()];
       let Dn = designationsLookup[next_color.toString()];
-      if (Dc["id"] !== Dp["id"]) {
+      if (Dc["id"] !== Dl["id"]) {
         if (Dc["id"] !== "NONE") {
           macroText += Dc["command"];
           macroText += mc.select;
         }
       }
-      if (Dn !== Dc && Dc["id"] != "NONE") {
+      if (
+        Dn !== Dc &&
+        !["NONE", "DIG_STAIR_DOWN", "DIG_STAIR_UP"].includes(Dc["id"])
+      ) {
         macroText += mc.select;
       }
       if (!line_end) {

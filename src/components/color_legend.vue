@@ -1,23 +1,38 @@
 <template>
   <div>
-    <v-container class="mb-6">
-      <v-row no-gutters>
-        <v-col
+    <v-container>
+      <v-card class="d-flex justify-center flex-wrap mb-6" sm="2" flat tile>
+        <v-card
+          class="pt-1"
+          :style="{
+            background: '#dddddd',
+            border: '1px solid #aaaaaa',
+          }"
+          ><v-card-title> COLOR LEGEND </v-card-title></v-card
+        >
+        <v-card
           v-for="(dl, color) in designationsLookup"
           :key="dl"
-          cols="12"
-          sm="4"
+          :elevation="0"
+          :style="{
+            border: '0px',
+          }"
         >
-          <v-card class="pa-2" tile>
-            <template v-slot:prepend>
-              <v-icon :style="{ color: `rgba(${color})` }">
-                {{ icon }}
-              </v-icon>
-            </template>
-            <template v-slot:title> {{ dl.id }}</template>
-          </v-card>
-        </v-col>
-      </v-row>
+          <template v-slot:prepend>
+            <v-icon v-if="dl.color" :style="{ color: `rgba(${dl.color})` }">
+              {{ dl.icon }}
+            </v-icon>
+            <v-icon v-else :style="{ color: `rgba(${color})` }">
+              {{ dl.icon }}
+            </v-icon>
+          </template>
+          <template v-slot:title
+            ><span class="text-sm">
+              {{ dl.id }}
+            </span></template
+          >
+        </v-card>
+      </v-card>
     </v-container>
   </div>
 </template>

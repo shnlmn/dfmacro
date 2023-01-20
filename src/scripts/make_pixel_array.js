@@ -4,6 +4,7 @@ function splitarray(input, spacing) {
   for (let i = 0; i < input.length; i += spacing) {
     output[output.length] = input.slice(i, i + spacing);
   }
+  output = output.map((x) => [...x.slice(0, 3)]);
   return output;
 }
 
