@@ -6,12 +6,14 @@
     <v-sub-header>
       <h3>Upload a .png of your layout. Each pixel equals a tile in game.</h3>
     </v-sub-header>
-    <v-banner>
+    <span>
       I recommend using a graphics editor like Photoshop or an online pixel art
       tool like
       <a href="https://www.pixilart.com/draw">pixilart.com</a> to design your
       fortress.
-    </v-banner>
+      <br />
+      <br />
+    </span>
     <v-row>
       <v-col class="d-flex justify-center">
         <v-form ref="form" class="w-50">
@@ -27,15 +29,36 @@
     <color_legend></color_legend>
     <v-row>
       <v-col>
-        <v-title>Uploaded Image</v-title><br />
-        <canvas
-          id="showCanvas"
-          :width="showCanvas_width"
-          :height="showCanvas_height"
-        ></canvas>
-        <v-banner v-if="colors_used">
-          Colors used in this image (that match the color legend)
-        </v-banner>
+        <v-row>
+          <v-col><v-title>Uploaded Image</v-title><br /> </v-col>
+        </v-row>
+        <v-row class="d-flex justify-center">
+          <v-img
+            id="image-preview"
+            :src="image"
+            :max-width="showCanvas_width"
+            :height="showCanvas_height"
+          >
+            <template v-slot:placeholder>
+              <v-row
+                v-if="file_name"
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+              >
+                <v-progress-circular
+                  indeterminate
+                  color="grey"
+                ></v-progress-circular>
+              </v-row>
+            </template>
+          </v-img>
+        </v-row>
+        <v-row v-if="colors_used">
+          <v-col>
+            Colors used in this image (that match the color legend)
+          </v-col>
+        </v-row>
         <color_list :colors_used="colors_used"></color_list>
       </v-col>
       <v-col>
@@ -91,6 +114,8 @@ export default {
   },
   methods: {
     readFile(e) {
+      this.image = null;
+      this.file_name = "";
       let reader = new FileReader();
       let files = e.target.files || e.dataTransfer.files;
       if (!files.length) return;
@@ -104,12 +129,12 @@ export default {
         this.readCanvas.width,
         this.readCanvas.height
       );
-      this.showCanvas.clearRect(
-        0,
-        0,
-        this.showCanvas_width,
-        this.showCanvas_height
-      );
+      // this.showCanvas.clearRect(
+      //   0,
+      //   0,
+      //   this.showCanvas_width,
+      //   this.showCanvas_height
+      // );
 
       reader.onload = (e) => {
         // get pixels once image is loaded
@@ -133,7 +158,7 @@ export default {
           this.img_height = this.img.height;
           let draw_config = [this.img, 0, 0];
           this.readCanvas.drawImage(...draw_config); // put image into dom once loaded
-          this.showCanvas.drawImage(...draw_config, draw_width, draw_height); // put image into dom once loaded
+          // this.showCanvas.drawImage(...draw_config, draw_width, draw_height); // put image into dom once loaded
           let imgData = this.readCanvas.getImageData(
             0,
             0,
@@ -161,10 +186,10 @@ export default {
     const ctx = c.getContext("2d");
     this.readCanvas = ctx;
 
-    const cS = document.getElementById("showCanvas");
-    const ctxS = cS.getContext("2d");
-    ctxS.imageSmoothingEnabled = false;
-    this.showCanvas = ctxS;
+    // const cS = document.getElementById("showCanvas");
+    // const ctxS = cS.getContext("2d");
+    // ctxS.imageSmoothingEnabled = false;
+    // this.showCanvas = ctxS;
   },
 };
 </script>
@@ -195,5 +220,8 @@ a {
   font-size: 0.85em;
   height: 300px;
   padding: 10px;
+}
+#image-preview {
+  image-rendering: pixelated;
 }
 </style>

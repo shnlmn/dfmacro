@@ -1,5 +1,5 @@
 <template>
-  <v-card v-for="(key, color) in color_objs" :key="key" class="mx-auto">
+  <v-card v-for="(key, color) in color_objs" :key="key" class="mx-auto w-50">
     <template v-slot:prepend>
       <v-icon v-if="key.color" :style="{ color: `rgba(${key.color})` }">
         {{ key.icon }}
