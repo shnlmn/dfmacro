@@ -1,15 +1,8 @@
 <template>
   <div>
     <v-container>
+      Command color key
       <v-card class="d-flex justify-center flex-wrap mb-6" sm="2" flat tile>
-        <v-card
-          class="pt-1"
-          :style="{
-            background: '#dddddd',
-            border: '1px solid #aaaaaa',
-          }"
-          ><v-card-title> COLOR LEGEND </v-card-title></v-card
-        >
         <v-card
           v-for="(dl, color) in designationsLookup"
           :key="dl"
@@ -29,8 +22,9 @@
           <template v-slot:title
             ><span class="text-sm">
               {{ dl.id }}
-            </span></template
-          >
+            </span>
+          </template>
+          <template v-slot:subtitle> RGB: {{ color }} </template>
         </v-card>
       </v-card>
     </v-container>

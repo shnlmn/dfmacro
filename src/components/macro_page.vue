@@ -16,14 +16,20 @@
     </span>
     <v-row>
       <v-col class="d-flex justify-center">
-        <v-form ref="form" class="w-50">
+        <v-form ref="form" class="w-25">
           <v-file-input
-            @change="readFile($event)"
             type="file"
             label="Upload Image"
             prepend-icon="mdi-image"
+            @change="uploadFile($event)"
           ></v-file-input>
         </v-form>
+        <v-btn class="ml-10 mt-2" @click="readFile($event)">UPLOAD</v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-checkbox label=""></v-checkbox>
       </v-col>
     </v-row>
     <color_legend></color_legend>
@@ -96,6 +102,7 @@ export default {
     return {
       MacroText: "Upload image file to generate macro...",
       pixelData: null,
+      imageFile: null,
       readCanvas: null,
       showCanvas: null,
       image: null,
@@ -113,14 +120,18 @@ export default {
     msg: String,
   },
   methods: {
-    readFile(e) {
+    uploadFile(e) {
+      // this.imageFile = e.target.files || e.dataTransfer.files;
+      this.imageFile = e.target;
+    },
+    readFile() {
       this.image = null;
       this.file_name = "";
       let reader = new FileReader();
-      let files = e.target.files || e.dataTransfer.files;
-      if (!files.length) return;
-      reader.readAsDataURL(files[0]); // Read file from input form
-      this.file_name = e.target.value.match(/^.*?([^\\/.]*)[^\\/]*$/)[1];
+      // let files = e.target.files || e.dataTransfer.files;
+      if (!this.imageFile.files.length) return;
+      reader.readAsDataURL(this.imageFile.files[0]); // Read file from input form
+      this.file_name = this.imageFile.value.match(/^.*?([^\\/.]*)[^\\/]*$/)[1];
       //RESET SOME THINGS
       this.colors_used = [];
       this.readCanvas.clearRect(
@@ -129,12 +140,6 @@ export default {
         this.readCanvas.width,
         this.readCanvas.height
       );
-      // this.showCanvas.clearRect(
-      //   0,
-      //   0,
-      //   this.showCanvas_width,
-      //   this.showCanvas_height
-      // );
 
       reader.onload = (e) => {
         // get pixels once image is loaded
